@@ -1,15 +1,12 @@
 import React from "react";
-// import ReactDOM from 'react-dom';
 import "./questionstyle.css";
-//import questionService from '../services/QuestionService';
 import { Icon } from "@iconify/react";
 import { Card, Row, Col, Container } from "react-bootstrap";
-import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
 import Tags from "./Tags";
 import votingService from "../services/VotingService";
 import bxUpvote from "@iconify-icons/bx/bx-upvote";
 import bxDownvote from "@iconify-icons/bx/bx-downvote";
-
+import logo from "./logo.png";
 class QuestionCard extends React.Component {
   constructor(props) {
     super(props);
@@ -23,6 +20,11 @@ class QuestionCard extends React.Component {
     this.upvoteClicked = this.upvoteClicked.bind(this);
     this.downvoteClicked = this.downvoteClicked.bind(this);
     this.visitOwner = this.visitOwner.bind(this);
+    this.doNothing = this.doNothing.bind(this);
+  }
+
+  doNothing() {
+    /*literally nothing*/
   }
 
   upvoteClicked() {
@@ -151,6 +153,7 @@ class QuestionCard extends React.Component {
                   <Col>
                     <Row
                       onClick={this.questionClickedShowAnswers}
+                      className="questionCard"
                       style={{
                         textAlign: "left",
                         marginTop: "-1px",
@@ -162,13 +165,17 @@ class QuestionCard extends React.Component {
                         {" "}
                         <Card.Subtitle>
                           <div
-                            className="clickable-paragraph"
-                            onClick={this.questionClickedShowAnswers}
+                            onClick={
+                              this.props.onAllAnswers
+                                ? this.doNothing
+                                : this.questionClickedShowAnswers
+                            }
                             color="white"
                             style={{ whiteSpace: "pre-wrap" }}
-                          >
-                            {this.props.body}
-                          </div>
+                            dangerouslySetInnerHTML={{
+                              __html: this.props.body,
+                            }}
+                          />
                         </Card.Subtitle>
                       </Col>
                     </Row>
@@ -178,13 +185,6 @@ class QuestionCard extends React.Component {
                     <Row>
                       <Col md="auto">
                         <div>
-                          <img
-                            className="asker"
-                            src="https://upload.wikimedia.org/wikipedia/en/a/a1/NafSadh_Profile.jpg"
-                            alt="user pic"
-                            width="25"
-                            height="25"
-                          />
                           <text style={{ color: "white" }}>
                             {" "}
                             Asked by -{" "}
